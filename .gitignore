@@ -1,0 +1,48 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Dependency directories
+node_modules/
+.pnpm/
+
+# Next.js build output
+.next/
+out/
+
+# Production build artifacts
+build/
+dist/
+
+# Testing
+coverage/
+
+# Environment variables
+.env
+.env.*.local
+.env.local
+
+# Editor settings & system files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# If using next-i18next
+public/locales/.gitkeep
+
+# If using TypeScript
+*.tsbuildinfo
+
+# If using Tailwind or PostCSS caching
+.postcss-cache/
+.tailwind-cache/
+
+# Mac system files
+.DS_Store
