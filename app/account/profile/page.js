@@ -7,26 +7,27 @@ export const metadata = {
 	title: "Update profile",
 };
 
-export default async function Page() {
+export default async function Page({ searchParams }) {
 	const session = await auth();
-	const guest = await getCustomer(session.user.email);
+	const customer = await getCustomer(session.user.email);
+	const { success } = searchParams;
 
 	return (
 		<div>
 			<h2 className="font-semibold text-2xl text-violet-400 mb-4">
-				Update your guest profile
+				Update your customer profile
 			</h2>
 
 			<p className="text-lg mb-8 text-primary-200">
 				Please use a valid tax number and correct adress
 			</p>
 
-			<UpdateProfileForm guest={guest}>
+			<UpdateProfileForm customer={customer} success={success}>
 				<SelectCountry
 					name="nationality"
 					id="nationality"
 					className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
-					defaultCountry={guest.nationality}
+					defaultCountry={customer.nationality}
 				/>
 			</UpdateProfileForm>
 		</div>

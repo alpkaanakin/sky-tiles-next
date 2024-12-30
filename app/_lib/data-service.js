@@ -43,9 +43,6 @@ export const getProducts = async function () {
 		.select("id, name, stock, regularPrice, discount, image")
 		.order("name");
 
-	// For testing
-	// await new Promise((res) => setTimeout(res, 2000));
-
 	if (error) {
 		console.error(error);
 		throw new Error("Cabins could not be loaded");
@@ -54,7 +51,6 @@ export const getProducts = async function () {
 	return data;
 };
 
-// Guests are uniquely identified by their email address
 export async function getCustomer(email) {
 	const { data, error } = await supabase
 		.from("customers")
@@ -62,7 +58,6 @@ export async function getCustomer(email) {
 		.eq("email", email)
 		.single();
 
-	// No error here! We handle the possibility of no guest in the sign in callback
 	return data;
 }
 
@@ -155,7 +150,7 @@ export async function createBooking(newBooking) {
 // UPDATE
 
 // The updatedFields is an object which should ONLY contain the updated data
-export async function updateCustomer(id, updatedFields) {
+export async function updateCustomerDb(id, updatedFields) {
 	const { data, error } = await supabase
 		.from("customers")
 		.update(updatedFields)

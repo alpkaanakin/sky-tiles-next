@@ -1,31 +1,32 @@
 "use server";
 
 import { auth, signIn, signOut } from "./auth";
-import { getBookings } from "./data-service";
+import { getBookings, updateCustomerDb } from "./data-service";
 import { supabase } from "./supabase";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function updateCustomer(formData) {
 	const session = await auth();
-	if (!session) throw new Error("You must be logged in");
+	if (!session) throw new Error("you must logged in");
 
-	const nationalID = formData.get("nationalID");
-	const [nationality, countryFlag] = formData.get("nationality").split("%");
+	const national_id = formData.get("national_id");
+	const adress = formData.get("adress");
+	const phone_number = formData.get("phone_number");
+	const nationality = formData.get("nationality");
+	const regex = /^[A-Za-z0-9]{6,13}$/;
 
-	if (!/^[a-zA-Z0-9]{6,12}$/.test(nationalID))
-		throw new Error("Please provide a valid national ID");
+	if (!regex.test(national_id)) {
+		throw new Error(
+			"Please provide a valid national ID (6-12 alphanumeric characters)."
+		);
+	}
 
-	const updateData = { nationality, countryFlag, nationalID };
+	const updatedData = { national_id, adress, phone_number, nationality };
+	await updateCustomerDb(session.user.customerId, updatedData);
 
-	const { data, error } = await supabase
-		.from("guests")
-		.update(updateData)
-		.eq("id", session.user.guestId);
-
-	if (error) throw new Error("Guest could not be updated");
-
-	revalidatePath("/account/profile");
+	revalidatePath(`/account/profile`);
+	redirect(`/account/profile?success=true`);
 }
 
 export async function createOrder(orderData, formData) {
