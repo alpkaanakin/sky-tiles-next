@@ -3,7 +3,7 @@ import TextExpander from "@/app/_components/TextExpander";
 import { EyeSlashIcon, MapPinIcon, UsersIcon } from "@heroicons/react/24/solid";
 
 function Product({ product }) {
-	const { id, name, regularPrice, discount, image, description } = product;
+	const { name, image, description } = product;
 
 	return (
 		<div className="grid grid-cols-[3fr_4fr] gap-20 border border-primary-800 py-3 px-10 mb-24">
@@ -12,7 +12,7 @@ function Product({ product }) {
 					src={image}
 					fill
 					className="object-cover"
-					alt={`Cabin ${name}`}
+					alt={`Product ${name}`}
 				/>
 			</div>
 

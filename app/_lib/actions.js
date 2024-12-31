@@ -63,24 +63,26 @@ export async function createOrder(orderData, formData) {
 	return { success: true };
 }
 
-export async function deleteBooking(bookingId) {
+export async function deleteCartItem(itemId) {
+	console.log("deleting item", itemId);
 	const session = await auth();
 	if (!session) throw new Error("You must be logged in");
 
-	const guestBookings = await getBookings(session.user.guestId);
-	const guestBookingIds = guestBookings.map((booking) => booking.id);
+	// const guestBookings = await getBookings(session.user.guestId);
+	// const guestBookingIds = guestBookings.map((booking) => booking.id);
 
-	if (!guestBookingIds.includes(bookingId))
-		throw new Error("You are not allowed to delete this booking");
+	// if (!guestBookingIds.includes(bookingId))
+	// 	throw new Error("You are not allowed to delete this booking");
 
-	const { error } = await supabase
-		.from("bookings")
+	const { data, error } = await supabase
+		.from("cart_items")
 		.delete()
-		.eq("id", bookingId);
+		.eq("id", itemId);
 
-	if (error) throw new Error("Booking could not be deleted");
+	if (error) throw new Error("Item could not be deleted");
+	console.log(data);
 
-	revalidatePath("/account/reservations");
+	revalidatePath("/account/cart");
 }
 
 export async function updateBooking(formData) {

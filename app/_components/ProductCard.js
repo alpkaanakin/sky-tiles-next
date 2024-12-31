@@ -3,8 +3,8 @@ import Link from "next/link";
 import { UsersIcon } from "@heroicons/react/24/solid";
 
 function ProductCard({ product }) {
-	const { id, name, regularPrice, discount, image } = product;
-
+	const { id, name, regular_price, discount, image, price } = product;
+	console.log(product);
 	return (
 		<div className="flex border-primary-800 border">
 			<div className="flex-1 relative">
@@ -33,14 +33,14 @@ function ProductCard({ product }) {
 						{discount > 0 ? (
 							<>
 								<span className="text-3xl font-[350]">
-									${regularPrice - discount}
+									${regular_price - discount}
 								</span>
 								<span className="line-through font-semibold text-primary-600">
-									${regularPrice}
+									${regular_price}
 								</span>
 							</>
 						) : (
-							<span className="text-3xl font-[350]">${regularPrice}</span>
+							<span className="text-3xl font-[350]">${price}</span>
 						)}
 						<span className="text-primary-200">/ pcs</span>
 					</p>

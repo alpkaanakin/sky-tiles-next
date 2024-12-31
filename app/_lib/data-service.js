@@ -23,6 +23,33 @@ export async function getProduct(id) {
 	return data;
 }
 
+export async function GetShoppingCart(customer_id) {
+	const { data, error } = await supabase
+		.from("carts")
+		.select("*")
+		.eq("customer_id", customer_id)
+		.single();
+
+	if (error) {
+		console.error(error);
+	}
+
+	return data;
+}
+
+export async function GetCartItems(cart_id) {
+	const { data, error } = await supabase
+		.from("cart_items")
+		.select("id,quantity,price,products(id,name,price,image)")
+		.eq("cart_id", cart_id);
+
+	if (error) {
+		console.error(error);
+	}
+
+	return data;
+}
+
 export async function getProductPrice(id) {
 	const { data, error } = await supabase
 		.from("products")
@@ -40,7 +67,7 @@ export async function getProductPrice(id) {
 export const getProducts = async function () {
 	const { data, error } = await supabase
 		.from("products")
-		.select("id, name, stock, regularPrice, discount, image")
+		.select("id, name, stock, regular_price, discount, image")
 		.order("name");
 
 	if (error) {
@@ -183,12 +210,16 @@ export async function updateOrder(id, updatedFields) {
 /////////////
 // DELETE
 
-export async function deleteOrder(id) {
-	const { data, error } = await supabase.from("orders").delete().eq("id", id);
+// export async function deleteCartItem(id) {
+// 	console.log("deleting Item", id);
+// 	const { data, error } = await supabase
+// 		.from("cart_items")
+// 		.delete()
+// 		.eq("id", id);
 
-	if (error) {
-		console.error(error);
-		throw new Error("Booking could not be deleted");
-	}
-	return data;
-}
+// 	if (error) {
+// 		console.error(error);
+// 		throw new Error("Cart Item could not be deleted");
+// 	}
+// 	return data;
+// }
