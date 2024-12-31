@@ -3,7 +3,7 @@ import Image from "next/image";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { format, formatDistance, isPast, parseISO } from "date-fns";
 import { getOrder, getProduct, GetShoppingCart } from "../_lib/data-service";
-import DeleteItemFromCart from "./DeleteOrderFromCart";
+import DeleteItemFromCart from "./DeleteItemFormCart";
 
 async function OrderCardCard({ item, onDelete }) {
 	const {

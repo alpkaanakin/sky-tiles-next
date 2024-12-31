@@ -40,7 +40,7 @@ export async function GetShoppingCart(customer_id) {
 export async function GetCartItems(cart_id) {
 	const { data, error } = await supabase
 		.from("cart_items")
-		.select("id,quantity,price,products(id,name,price,image)")
+		.select("id,quantity,price,cart_id,products(id,name,price,image)")
 		.eq("cart_id", cart_id);
 
 	if (error) {

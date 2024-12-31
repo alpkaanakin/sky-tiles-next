@@ -1,7 +1,12 @@
 "use server";
 
 import { auth, signIn, signOut } from "./auth";
-import { getBookings, updateCustomerDb } from "./data-service";
+import {
+	getBookings,
+	GetCartItems,
+	GetShoppingCart,
+	updateCustomerDb,
+} from "./data-service";
 import { supabase } from "./supabase";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -64,15 +69,15 @@ export async function createOrder(orderData, formData) {
 }
 
 export async function deleteCartItem(itemId) {
-	console.log("deleting item", itemId);
 	const session = await auth();
 	if (!session) throw new Error("You must be logged in");
 
-	// const guestBookings = await getBookings(session.user.guestId);
-	// const guestBookingIds = guestBookings.map((booking) => booking.id);
+	const customerCart = await GetShoppingCart(session.user.customerId);
+	const customerCartItems = await GetCartItems(customerCart.id);
+	const customerCartItemsIds = customerCartItems.map((item) => item.id);
 
-	// if (!guestBookingIds.includes(bookingId))
-	// 	throw new Error("You are not allowed to delete this booking");
+	if (!customerCartItemsIds.includes(itemId))
+		throw new Error("You are not allowed to delete this booking");
 
 	const { data, error } = await supabase
 		.from("cart_items")
