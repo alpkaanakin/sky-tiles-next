@@ -1,17 +1,21 @@
-import Link from "next/link";
 import Image from "next/image";
-import { PencilSquareIcon } from "@heroicons/react/24/solid";
-import { format, formatDistance, isPast, parseISO } from "date-fns";
-import { getOrder, getProduct, GetShoppingCart } from "../_lib/data-service";
 import DeleteItemFromCart from "./DeleteItemFormCart";
 
-async function OrderCardCard({ item, onDelete }) {
+async function CartItemCard({ item, onDelete, onDec, onInc }) {
 	const {
 		quantity,
 		id,
 		price,
 		products: { name, image },
 	} = item;
+
+	function handleDec() {
+		onDec(item.id);
+	}
+
+	function handleInc() {
+		onInc(item.id);
+	}
 	return (
 		<div className="flex border border-primary-800">
 			<div className="relative h-32 aspect-square">
@@ -42,13 +46,22 @@ async function OrderCardCard({ item, onDelete }) {
 
 			<div className="flex flex-col border-l border-primary-800 w-[100px]">
 				<>
-					<p
-						href={`/account/reservations/edit/${id}`}
-						className="group flex items-center gap-2 uppercase text-xs font-bold text-primary-300 border-b border-primary-800 flex-grow px-3 hover:bg-accent-600 transition-colors hover:text-primary-900"
-					>
-						<PencilSquareIcon className="h-5 w-5 text-primary-600 group-hover:text-primary-800 transition-colors" />
-						<span className="mt-1">Amount:{quantity}</span>
-					</p>
+					<div className="group flex items-center gap-2 uppercase text-xs font-bold text-primary-300 border-b border-primary-800 flex-grow px-3">
+						<button
+							className="text-4xl hover:bg-violet-600 transition-colors hover:text-primary-900 p-1"
+							onClick={handleDec}
+						>
+							-
+						</button>
+						<span className="mt-1 text-xl">{quantity}</span>
+
+						<button
+							className="text-2xl hover:bg-violet-600 transition-colors hover:text-primary-900 text-align p-1"
+							onClick={handleInc}
+						>
+							+
+						</button>
+					</div>
 					<DeleteItemFromCart itemId={id} onDelete={onDelete} />
 				</>
 			</div>
@@ -56,4 +69,4 @@ async function OrderCardCard({ item, onDelete }) {
 	);
 }
 
-export default OrderCardCard;
+export default CartItemCard;

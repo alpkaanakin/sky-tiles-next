@@ -2,7 +2,6 @@
 
 import { auth, signIn, signOut } from "./auth";
 import {
-	getBookings,
 	GetCartItems,
 	GetShoppingCart,
 	updateCustomerDb,
@@ -88,6 +87,70 @@ export async function deleteCartItem(itemId) {
 	console.log(data);
 
 	revalidatePath("/account/cart");
+}
+
+export async function incItemQuantity(itemId) {
+	// 1) Fetch current quantity
+	const { data: item, error: fetchError } = await supabase
+		.from("cart_items")
+		.select("quantity")
+		.eq("id", itemId)
+		.single();
+
+	if (fetchError) {
+		console.error("Error fetching item:", fetchError);
+		throw new Error("Could not fetch item quantity.");
+	}
+
+	const newQuantity = (item?.quantity || 0) + 1;
+
+	// 2) Update the quantity
+	const { data: updatedItem, error: updateError } = await supabase
+		.from("cart_items")
+		.update({ quantity: newQuantity })
+		.eq("id", itemId)
+		.single();
+
+	if (updateError) {
+		console.error("Error incrementing quantity:", updateError);
+		throw new Error("Could not increment item quantity.");
+	}
+
+	console.log("Quantity incremented:", updatedItem);
+	revalidatePath("/account/reservations");
+	return updatedItem;
+}
+
+export async function decItemQuantity(itemId) {
+	// 1) Fetch current quantity
+	const { data: item, error: fetchError } = await supabase
+		.from("cart_items")
+		.select("quantity")
+		.eq("id", itemId)
+		.single();
+
+	if (fetchError) {
+		console.error("Error fetching item:", fetchError);
+		throw new Error("Could not fetch item quantity.");
+	}
+
+	const newQuantity = (item?.quantity || 0) - 1;
+
+	// 2) Update the quantity
+	const { data: updatedItem, error: updateError } = await supabase
+		.from("cart_items")
+		.update({ quantity: newQuantity })
+		.eq("id", itemId)
+		.single();
+
+	if (updateError) {
+		console.error("Error incrementing quantity:", updateError);
+		throw new Error("Could not increment item quantity.");
+	}
+
+	console.log("Quantity incremented:", updatedItem);
+	revalidatePath("/account/reservations");
+	return updatedItem;
 }
 
 export async function updateBooking(formData) {

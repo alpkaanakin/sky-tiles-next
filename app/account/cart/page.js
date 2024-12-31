@@ -1,4 +1,4 @@
-import OrderCard from "@/app/_components/OrderCard";
+import CustomerCart from "@/app/_components/CustomerCart";
 import { auth } from "@/app/_lib/auth";
 import {
 	GetCartItems,
@@ -30,7 +30,7 @@ export default async function Page() {
 				</p>
 			) : (
 				// <h1>hello</h1>
-				<OrderCard cart={cart} cartItems={cartItems} />
+				<CustomerCart cart={cart} cartItems={cartItems} />
 			)}
 			{/* <button className="bg-violet-400 px-8 py-4 text-primary-800 font-semibold hover:bg-ciolet-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300">
 				Order Now

@@ -1,9 +1,13 @@
 "use client";
 
-import OrderCardCard from "./OrderCardCard";
-import { deleteCartItem } from "../_lib/actions";
+import {
+	decItemQuantity,
+	deleteCartItem,
+	incItemQuantity,
+} from "../_lib/actions";
+import CartItemCard from "./CartItemCard";
 
-function OrderCard({ cart, cartItems }) {
+function CustomerCart({ cart, cartItems }) {
 	// const [optimisticBookings, optimisticDelete] = useOptimistic(
 	// 	orders,
 	// 	(curBookings, orderId) => {
@@ -18,17 +22,29 @@ function OrderCard({ cart, cartItems }) {
 		await deleteCartItem(id);
 	}
 
+	async function handleDecItem(id) {
+		console.log("decreasing..");
+		await decItemQuantity(id);
+	}
+
+	async function handleIncItem(id) {
+		console.log("increase");
+		await incItemQuantity(id);
+	}
+
 	return (
 		<ul className="space-y-6">
 			{cartItems.map((item) => (
-				<OrderCardCard
+				<CartItemCard
 					key={item.id}
 					item={item}
 					onDelete={() => handleDelete(item.id)}
+					onDec={() => handleDecItem(item.id)}
+					onInc={() => handleIncItem(item.id)}
 				/>
 			))}
 		</ul>
 	);
 }
 
-export default OrderCard;
+export default CustomerCart;
