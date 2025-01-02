@@ -6,7 +6,7 @@ async function CartItemCard({ item, onDelete, onDec, onInc }) {
 		quantity,
 		id,
 		price,
-		products: { name, image },
+		products: { name, image, stock },
 	} = item;
 
 	function handleDec() {
@@ -16,6 +16,8 @@ async function CartItemCard({ item, onDelete, onDec, onInc }) {
 	function handleInc() {
 		onInc(item.id);
 	}
+
+	console.log(item);
 	return (
 		<div className="flex border border-primary-800">
 			<div className="relative h-32 aspect-square">
@@ -32,15 +34,14 @@ async function CartItemCard({ item, onDelete, onDec, onInc }) {
 					<h3 className="text-xl font-semibold">{name}</h3>
 
 					<span className="bg-amber-300 text-primary-900 h-7 px-3 uppercase text-xs font-bold flex items-center rounded-sm">
-						not Paid
+						Only {stock} items Left
 					</span>
 				</div>
 
 				<div className="flex gap-5 mt-auto items-baseline">
-					<p className="text-xl font-semibold text-accent-400">
-						Total Cost : ${price * quantity} ({price} * {quantity})
+					<p className="text-xl font-semibold text-violet-400">
+						Price : ${price * quantity} ({price} * {quantity})
 					</p>
-					<p className="text-primary-300">&bull;</p>
 				</div>
 			</div>
 

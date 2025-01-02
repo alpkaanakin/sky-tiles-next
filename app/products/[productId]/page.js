@@ -21,7 +21,7 @@ export async function generateStaticParams() {
 
 export default async function Page({ params, searchParams }) {
 	const product = await getProduct(params.productId);
-	const success = searchParams;
+	const { success } = searchParams;
 
 	return (
 		<div className="max-w-6xl mx-auto mt-8">

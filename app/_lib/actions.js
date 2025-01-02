@@ -4,6 +4,7 @@ import { auth, signIn, signOut } from "./auth";
 import {
 	createCustomerCart,
 	GetCartItems,
+	GetExistCartItem,
 	GetShoppingCart,
 	updateCustomerDb,
 } from "./data-service";
@@ -43,12 +44,26 @@ export async function addToCart(formData) {
 	}
 
 	const productId = formData.get("id");
+	const quantity = formData.get("quantity");
 
 	const newCartItem = {
-		quantity: formData.get("quantity"),
+		quantity: quantity,
 		product_id: productId,
 		cart_id: customerCart.id,
 	};
+
+	const existCartItem = await GetExistCartItem(customerCart.id, productId);
+	if (existCartItem) {
+		const updatedQuantity = +existCartItem.quantity + +quantity;
+		const { data, error } = await supabase
+			.from("cart_items")
+			.update({ quantity: updatedQuantity })
+			.eq("id", existCartItem.id)
+			.single();
+
+		revalidatePath(`/products/${productId}`);
+		redirect(`/products/${productId}?success=true`);
+	}
 
 	const { data, error } = await supabase
 		.from("cart_items")
@@ -83,12 +98,11 @@ export async function deleteCartItem(itemId) {
 		.eq("id", itemId);
 
 	if (error) throw new Error("Item could not be deleted");
-	console.log(data);
 
 	revalidatePath("/account/cart");
 }
 
-export async function incItemQuantity(itemId) {
+export async function incItemQuantity(itemId, amount) {
 	// 1) Fetch current quantity
 	const { data: item, error: fetchError } = await supabase
 		.from("cart_items")
@@ -101,7 +115,7 @@ export async function incItemQuantity(itemId) {
 		throw new Error("Could not fetch item quantity.");
 	}
 
-	const newQuantity = (item?.quantity || 0) + 1;
+	const newQuantity = (item?.quantity || 0) + amount;
 
 	// 2) Update the quantity
 	const { data: updatedItem, error: updateError } = await supabase
@@ -120,7 +134,7 @@ export async function incItemQuantity(itemId) {
 	return updatedItem;
 }
 
-export async function decItemQuantity(itemId) {
+export async function decItemQuantity(itemId, amount) {
 	// 1) Fetch current quantity
 	const { data: item, error: fetchError } = await supabase
 		.from("cart_items")
@@ -133,7 +147,10 @@ export async function decItemQuantity(itemId) {
 		throw new Error("Could not fetch item quantity.");
 	}
 
-	const newQuantity = (item?.quantity || 0) - 1;
+	if (item?.quantity <= 1) {
+		return;
+	}
+	const newQuantity = (item?.quantity || 0) - amount;
 
 	// 2) Update the quantity
 	const { data: updatedItem, error: updateError } = await supabase

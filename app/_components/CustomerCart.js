@@ -24,12 +24,12 @@ function CustomerCart({ cart, cartItems }) {
 
 	async function handleDecItem(id) {
 		console.log("decreasing..");
-		await decItemQuantity(id);
+		await decItemQuantity(id, 1);
 	}
 
 	async function handleIncItem(id) {
 		console.log("increase");
-		await incItemQuantity(id);
+		await incItemQuantity(id, 1);
 	}
 
 	return (

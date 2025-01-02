@@ -35,9 +35,13 @@ export default async function Page() {
 				// <h1>hello</h1>
 				<CustomerCart cart={cart} cartItems={cartItems} />
 			)}
-			{/* <button className="bg-violet-400 px-8 py-4 text-primary-800 font-semibold hover:bg-ciolet-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300">
-				Order Now
-			</button> */}
+
+			<p className="text-3xl font-semibold text-accent-400 my-16">
+				Total Price Price : ${cart.total_cost}
+			</p>
+			<button className="bg-violet-800 px-8 py-4 text-primary-100 font-semibold hover:bg-violet-700 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300">
+				Proceed to Checkout
+			</button>
 		</div>
 	);
 }

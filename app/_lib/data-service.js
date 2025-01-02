@@ -23,6 +23,24 @@ export async function getProduct(id) {
 	return data;
 }
 
+export async function GetExistCartItem(cart_id, product_id) {
+	const { data, error } = await supabase
+		.from("cart_items")
+		.select(
+			"id, quantity, price, cart_id, products(id, name, price, image, stock)"
+		)
+		.eq("cart_id", cart_id) // Match the cart_items row with this cart_id
+		.eq("product_id", product_id) // Also match the cart_items row with this id
+		.single();
+
+	if (error) {
+		console.error("Error fetching cart items:", error);
+		return null;
+	}
+
+	return data;
+}
+
 export async function createShoppingCart(customerId) {
 	// createCustomerCart should return the newly created cart
 	const { data, error } = (customerCart = await createCustomerCart({
@@ -49,7 +67,7 @@ export async function GetShoppingCart(customer_id) {
 export async function GetCartItems(cart_id) {
 	const { data, error } = await supabase
 		.from("cart_items")
-		.select("id,quantity,price,cart_id,products(id,name,price,image)")
+		.select("id,quantity,price,cart_id,products(id,name,price,image,stock)")
 		.eq("cart_id", cart_id);
 
 	if (error) {
@@ -81,7 +99,7 @@ export const getProducts = async function () {
 
 	if (error) {
 		console.error(error);
-		throw new Error("Cabins could not be loaded");
+		throw new Error("products could not be loaded");
 	}
 
 	return data;

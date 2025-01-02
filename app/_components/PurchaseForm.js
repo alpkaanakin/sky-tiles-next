@@ -1,7 +1,7 @@
 "use client";
 
 import { addToCart } from "../_lib/actions";
-import AddtoCart from "./AddtoCart";
+
 import SubmitButton from "./SubmitButton";
 
 function PurchaseForm({ product, user, success }) {
@@ -62,9 +62,7 @@ function PurchaseForm({ product, user, success }) {
 					<SubmitButton pendingLabel="Processing...">Buy now</SubmitButton>
 				</div>
 			</form>
-			{success && (
-				<p className="text-green-500">Customer updated successfully!</p>
-			)}
+			{success && <p className="text-green-500">Added to Cart successfully!</p>}
 		</div>
 	);
 }
