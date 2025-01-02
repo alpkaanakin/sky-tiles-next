@@ -30,9 +30,14 @@
 
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
-import { createGuest, getCustomer, getGuest } from "./data-service";
+import {
+	createCustomer,
+	createCustomerCart,
+	getCustomer,
+} from "./data-service";
 
 const authConfig = {
+	secret: process.env.AUTH_SECRET ?? "fallback-dev-secret",
 	providers: [
 		Google({
 			clientId: process.env.AUTH_GOOGLE_ID,
@@ -48,7 +53,10 @@ const authConfig = {
 				const existingGuest = await getCustomer(user.email);
 
 				if (!existingGuest)
-					await createGuest({ email: user.email, fullName: user.name });
+					await createCustomer({
+						email: user.email,
+						fullName: user.name,
+					});
 
 				return true;
 			} catch {

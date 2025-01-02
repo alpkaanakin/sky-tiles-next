@@ -2,6 +2,7 @@
 
 import { auth, signIn, signOut } from "./auth";
 import {
+	createCustomerCart,
 	GetCartItems,
 	GetShoppingCart,
 	updateCustomerDb,
@@ -33,38 +34,39 @@ export async function updateCustomer(formData) {
 	redirect(`/account/profile?success=true`);
 }
 
-export async function createOrder(orderData, formData) {
-	// Optionally check server-side session again
+export async function addToCart(formData) {
 	const session = await auth();
-	if (!session) throw new Error("You must be logged in");
+	let customerCart = await GetShoppingCart(session.user.customerId);
+	if (!customerCart) {
+		// createCustomerCart should return the newly created cart
+		customerCart = await createCustomerCart({
+			customer_id: session.user.customerId,
+			total_cost: 0,
+		});
+	}
 
-	// Extract form fields:
-	const quantity = Number(formData.get("quantity") || 1);
-	const notes = formData.get("notes")?.slice(0, 1000) ?? "";
+	const productId = formData.get("id");
 
-	// Extract user + product data from orderData
-	const { productId, finalPrice, userId } = orderData;
-
-	// Build the new order object for DB insert
-	const newOrder = {
+	const newCartItem = {
+		quantity: formData.get("quantity"),
 		product_id: productId,
-		cost: finalPrice,
-		customer_id: userId,
-		amount: quantity,
-		notes,
-		// Example: store user info if your DB schema has columns for them
-		isPaid: false,
-		status: "pending",
+		cart_id: customerCart.id,
 	};
 
-	// Insert into your "orders" table
-	const { error } = await supabase.from("orders").insert([newOrder]);
-	if (error) throw new Error(error.message);
+	const { data, error } = await supabase
+		.from("cart_items")
+		.insert([newCartItem]); // Must pass an array of objects
 
-	// revalidate if necessary
+	// 4) Handle any errors
+	if (error) {
+		console.error("Error inserting cart item:", error);
+		throw new Error("Cart item could not be created.");
+	}
+
+	console.log("Inserted cart item:", data);
+
 	revalidatePath(`/products/${productId}`);
-
-	return { success: true };
+	redirect(`/products/${productId}?success=true`);
 }
 
 export async function deleteCartItem(itemId) {
@@ -151,45 +153,6 @@ export async function decItemQuantity(itemId) {
 	console.log("Quantity incremented:", updatedItem);
 	revalidatePath("/account/reservations");
 	return updatedItem;
-}
-
-export async function updateBooking(formData) {
-	const bookingId = Number(formData.get("bookingId"));
-
-	// 1) Authentication
-	const session = await auth();
-	if (!session) throw new Error("You must be logged in");
-
-	// 2) Authorization
-	const guestBookings = await getBookings(session.user.guestId);
-	const guestBookingIds = guestBookings.map((booking) => booking.id);
-
-	if (!guestBookingIds.includes(bookingId))
-		throw new Error("You are not allowed to update this booking");
-
-	// 3) Building update data
-	const updateData = {
-		numGuests: Number(formData.get("numGuests")),
-		observations: formData.get("observations").slice(0, 1000),
-	};
-
-	// 4) Mutation
-	const { error } = await supabase
-		.from("bookings")
-		.update(updateData)
-		.eq("id", bookingId)
-		.select()
-		.single();
-
-	// 5) Error handling
-	if (error) throw new Error("Booking could not be updated");
-
-	// 6) Revalidation
-	revalidatePath(`/account/reservations/edit/${bookingId}`);
-	revalidatePath("/account/reservations");
-
-	// 7) Redirecting
-	redirect("/account/reservations");
 }
 
 export async function signInAction() {

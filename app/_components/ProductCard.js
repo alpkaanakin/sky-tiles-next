@@ -4,7 +4,6 @@ import { UsersIcon } from "@heroicons/react/24/solid";
 
 function ProductCard({ product }) {
 	const { id, name, regular_price, discount, image, price } = product;
-	console.log(product);
 	return (
 		<div className="flex border-primary-800 border">
 			<div className="flex-1 relative">

@@ -1,24 +1,11 @@
 "use client";
 
-import { createOrder } from "../_lib/actions";
+import { addToCart } from "../_lib/actions";
+import AddtoCart from "./AddtoCart";
 import SubmitButton from "./SubmitButton";
 
-function PurchaseForm({ product, user }) {
-	const { stock, regularPrice, discount, id } = product;
-	const finalPrice = regularPrice - discount;
-
-	// Merge user data directly into orderData
-	const orderData = {
-		productId: id,
-		finalPrice,
-		userId: user.customerId, // or session user id
-		userEmail: user.email, // or any user fields you need
-		userImage: user.image,
-		userName: user.name,
-	};
-
-	// Bind the orderData to your server action
-	const createOrderWithData = createOrder.bind(null, orderData);
+function PurchaseForm({ product, user, success }) {
+	const { stock, id, price } = product;
 
 	return (
 		<div className="border p-4 rounded">
@@ -35,14 +22,7 @@ function PurchaseForm({ product, user }) {
 				</div>
 			</div>
 
-			<form
-				action={async (formData) => {
-					// formData -> quantity, notes, etc.
-					await createOrderWithData(formData);
-					// handle any post-submit logic
-				}}
-				className="p-4 space-y-4"
-			>
+			<form action={addToCart} className="p-4 space-y-4">
 				<div>
 					<label htmlFor="quantity" className="block mb-1 font-medium">
 						Quantity
@@ -63,6 +43,10 @@ function PurchaseForm({ product, user }) {
 				</div>
 
 				<div>
+					<textarea name="id" id="id" value={id} hidden></textarea>
+				</div>
+
+				<div>
 					<label htmlFor="notes" className="block mb-1 font-medium">
 						Special instructions?
 					</label>
@@ -78,6 +62,9 @@ function PurchaseForm({ product, user }) {
 					<SubmitButton pendingLabel="Processing...">Buy now</SubmitButton>
 				</div>
 			</form>
+			{success && (
+				<p className="text-green-500">Customer updated successfully!</p>
+			)}
 		</div>
 	);
 }

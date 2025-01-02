@@ -117,19 +117,6 @@ export async function getOrders(customerId) {
 	return data;
 }
 
-export async function getSettings() {
-	const { data, error } = await supabase.from("settings").select("*").single();
-
-	// await new Promise((res) => setTimeout(res, 5000));
-
-	if (error) {
-		console.error(error);
-		throw new Error("Settings could not be loaded");
-	}
-
-	return data;
-}
-
 export async function getCountries() {
 	try {
 		const res = await fetch(
@@ -145,7 +132,7 @@ export async function getCountries() {
 /////////////
 // CREATE
 
-export async function createGuest(customer) {
+export async function createCustomer(customer) {
 	const { data, error } = await supabase.from("customers").insert([customer]);
 
 	if (error) {
@@ -156,17 +143,12 @@ export async function createGuest(customer) {
 	return data;
 }
 
-export async function createBooking(newBooking) {
-	const { data, error } = await supabase
-		.from("bookings")
-		.insert([newBooking])
-		// So that the newly created object gets returned!
-		.select()
-		.single();
+export async function createCustomerCart(cart) {
+	const { data, error } = await supabase.from("carts").insert([cart]);
 
-	if (error) {
+	if ((data, error)) {
 		console.error(error);
-		throw new Error("Booking could not be created");
+		throw new Error("Cart could not be created");
 	}
 
 	return data;
@@ -190,35 +172,3 @@ export async function updateCustomerDb(id, updatedFields) {
 	}
 	return data;
 }
-
-export async function updateOrder(id, updatedFields) {
-	const { data, error } = await supabase
-		.from("orders")
-		.update(updatedFields)
-		.eq("id", id)
-		.select()
-		.single();
-
-	if (error) {
-		console.error(error);
-		throw new Error("Booking could not be updated");
-	}
-	return data;
-}
-
-/////////////
-// DELETE
-
-// export async function deleteCartItem(id) {
-// 	console.log("deleting Item", id);
-// 	const { data, error } = await supabase
-// 		.from("cart_items")
-// 		.delete()
-// 		.eq("id", id);
-
-// 	if (error) {
-// 		console.error(error);
-// 		throw new Error("Cart Item could not be deleted");
-// 	}
-// 	return data;
-// }

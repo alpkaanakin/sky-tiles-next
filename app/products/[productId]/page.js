@@ -1,4 +1,4 @@
-import AddtoCard from "@/app/_components/AddtoCard";
+import AddtoCart from "@/app/_components/AddtoCart";
 import Product from "@/app/_components/Product";
 import Spinner from "@/app/_components/Spinner";
 import { getProduct, getProducts } from "@/app/_lib/data-service";
@@ -19,8 +19,9 @@ export async function generateStaticParams() {
 	return ids;
 }
 
-export default async function Page({ params }) {
+export default async function Page({ params, searchParams }) {
 	const product = await getProduct(params.productId);
+	const success = searchParams;
 
 	return (
 		<div className="max-w-6xl mx-auto mt-8">
@@ -28,7 +29,7 @@ export default async function Page({ params }) {
 
 			<div>
 				<Suspense fallback={<Spinner />}>
-					<AddtoCard product={product} />
+					<AddtoCart product={product} success={success} />
 				</Suspense>
 
 				<Link
