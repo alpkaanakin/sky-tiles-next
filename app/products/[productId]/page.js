@@ -33,10 +33,10 @@ export default async function Page({ params, searchParams }) {
 				</Suspense>
 
 				<Link
-					href="/account/card"
+					href="/account/cart"
 					className="bg-violet-700 px-8 py-4 text-primary-100 font-semibold hover:bg-violet-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300"
 				>
-					Go To Card
+					Go To Cart
 				</Link>
 			</div>
 		</div>
