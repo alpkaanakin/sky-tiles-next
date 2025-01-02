@@ -1,6 +1,7 @@
 import CustomerCart from "@/app/_components/CustomerCart";
 import { auth } from "@/app/_lib/auth";
 import {
+	createShoppingCart,
 	GetCartItems,
 	getOrders,
 	GetShoppingCart,
@@ -13,13 +14,15 @@ export const metadata = {
 export default async function Page() {
 	const session = await auth();
 	const cart = await GetShoppingCart(session.user.customerId);
+	if (!cart) {
+		createShoppingCart(session.user.customerId);
+	}
 	const cartItems = await GetCartItems(cart.id);
 
 	// const orders = 5;
 
 	return (
 		<div>
-			demo
 			<h2 className="font-semibold text-2xl text-accent-400 mb-7">Your Card</h2>
 			{cartItems.length === 0 ? (
 				<p className="text-lg">

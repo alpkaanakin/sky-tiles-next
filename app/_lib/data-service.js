@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { supabase } from "./supabase";
+import { data } from "autoprefixer";
 
 /////////////
 // GET
@@ -19,6 +20,15 @@ export async function getProduct(id) {
 		notFound();
 	}
 
+	return data;
+}
+
+export async function createShoppingCart(customerId) {
+	// createCustomerCart should return the newly created cart
+	const { data, error } = (customerCart = await createCustomerCart({
+		customer_id: customerId,
+		total_cost: 0,
+	}));
 	return data;
 }
 

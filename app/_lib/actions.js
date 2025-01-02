@@ -37,12 +37,9 @@ export async function updateCustomer(formData) {
 export async function addToCart(formData) {
 	const session = await auth();
 	let customerCart = await GetShoppingCart(session.user.customerId);
+
 	if (!customerCart) {
-		// createCustomerCart should return the newly created cart
-		customerCart = await createCustomerCart({
-			customer_id: session.user.customerId,
-			total_cost: 0,
-		});
+		customerCart = createCustomerCart(session.user.id);
 	}
 
 	const productId = formData.get("id");
