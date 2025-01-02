@@ -1,5 +1,10 @@
 import Image from "next/image";
 import DeleteItemFromCart from "./DeleteItemFormCart";
+import {
+	decItemQuantity,
+	deleteCartItem,
+	incItemQuantity,
+} from "../_lib/actions";
 
 async function CartItemCard({ item, onDelete, onDec, onInc }) {
 	const {
@@ -9,15 +14,20 @@ async function CartItemCard({ item, onDelete, onDec, onInc }) {
 		products: { name, image, stock },
 	} = item;
 
-	function handleDec() {
-		onDec(item.id);
+	async function handleDelete() {
+		await deleteCartItem(id);
 	}
 
-	function handleInc() {
-		onInc(item.id);
+	async function handleDecItem() {
+		console.log("decreasing..");
+		await decItemQuantity(id, stock);
 	}
 
-	console.log(item);
+	async function handleIncItem() {
+		console.log("increase");
+		await incItemQuantity(id, stock);
+	}
+
 	return (
 		<div className="flex border border-primary-800">
 			<div className="relative h-32 aspect-square">
@@ -50,7 +60,7 @@ async function CartItemCard({ item, onDelete, onDec, onInc }) {
 					<div className="group flex items-center gap-2 uppercase text-xs font-bold text-primary-300 border-b border-primary-800 flex-grow px-3">
 						<button
 							className="text-4xl hover:bg-violet-600 transition-colors hover:text-primary-900 p-1"
-							onClick={handleDec}
+							onClick={handleDecItem}
 						>
 							-
 						</button>
@@ -58,12 +68,12 @@ async function CartItemCard({ item, onDelete, onDec, onInc }) {
 
 						<button
 							className="text-2xl hover:bg-violet-600 transition-colors hover:text-primary-900 text-align p-1"
-							onClick={handleInc}
+							onClick={handleIncItem}
 						>
 							+
 						</button>
 					</div>
-					<DeleteItemFromCart itemId={id} onDelete={onDelete} />
+					<DeleteItemFromCart itemId={id} onDelete={handleDelete} />
 				</>
 			</div>
 		</div>

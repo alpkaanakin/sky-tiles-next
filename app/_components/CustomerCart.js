@@ -1,10 +1,5 @@
 "use client";
 
-import {
-	decItemQuantity,
-	deleteCartItem,
-	incItemQuantity,
-} from "../_lib/actions";
 import CartItemCard from "./CartItemCard";
 
 function CustomerCart({ cart, cartItems }) {
@@ -16,32 +11,26 @@ function CustomerCart({ cart, cartItems }) {
 	// 	}
 	// );
 
-	// Accept the "orderId" parameter
-	async function handleDelete(id) {
-		// optimisticDelete(orderId);
-		await deleteCartItem(id);
-	}
+	// // Accept the "orderId" parameter
+	// async function handleDelete(id) {
+	// 	// optimisticDelete(orderId);
+	// 	await deleteCartItem(id);
+	// }
 
-	async function handleDecItem(id) {
-		console.log("decreasing..");
-		await decItemQuantity(id, 1);
-	}
+	// async function handleDecItem(id, stock) {
+	// 	console.log("decreasing..");
+	// 	await decItemQuantity(id, stock);
+	// }
 
-	async function handleIncItem(id) {
-		console.log("increase");
-		await incItemQuantity(id, 1);
-	}
+	// async function handleIncItem(id, stock) {
+	// 	console.log("increase");
+	// 	await incItemQuantity(id, stock);
+	// }
 
 	return (
 		<ul className="space-y-6">
 			{cartItems.map((item) => (
-				<CartItemCard
-					key={item.id}
-					item={item}
-					onDelete={() => handleDelete(item.id)}
-					onDec={() => handleDecItem(item.id)}
-					onInc={() => handleIncItem(item.id)}
-				/>
+				<CartItemCard key={item.id} item={item} />
 			))}
 		</ul>
 	);

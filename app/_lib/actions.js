@@ -5,6 +5,7 @@ import {
 	createCustomerCart,
 	GetCartItems,
 	GetExistCartItem,
+	getProduct,
 	GetShoppingCart,
 	updateCustomerDb,
 } from "./data-service";
@@ -52,9 +53,12 @@ export async function addToCart(formData) {
 		cart_id: customerCart.id,
 	};
 
+	const product = await getProduct(productId);
+
 	const existCartItem = await GetExistCartItem(customerCart.id, productId);
 	if (existCartItem) {
-		const updatedQuantity = +existCartItem.quantity + +quantity;
+		let updatedQuantity = +existCartItem.quantity + +quantity;
+		if (updatedQuantity >= product.stock) updatedQuantity = product.stock;
 		const { data, error } = await supabase
 			.from("cart_items")
 			.update({ quantity: updatedQuantity })
@@ -102,7 +106,7 @@ export async function deleteCartItem(itemId) {
 	revalidatePath("/account/cart");
 }
 
-export async function incItemQuantity(itemId, amount) {
+export async function incItemQuantity(itemId, stock) {
 	// 1) Fetch current quantity
 	const { data: item, error: fetchError } = await supabase
 		.from("cart_items")
@@ -115,7 +119,11 @@ export async function incItemQuantity(itemId, amount) {
 		throw new Error("Could not fetch item quantity.");
 	}
 
-	const newQuantity = (item?.quantity || 0) + amount;
+	let newQuantity = (item?.quantity || 0) + 1;
+
+	if (newQuantity > stock) {
+		newQuantity = stock;
+	}
 
 	// 2) Update the quantity
 	const { data: updatedItem, error: updateError } = await supabase
@@ -129,12 +137,11 @@ export async function incItemQuantity(itemId, amount) {
 		throw new Error("Could not increment item quantity.");
 	}
 
-	console.log("Quantity incremented:", updatedItem);
 	revalidatePath("/account/reservations");
 	return updatedItem;
 }
 
-export async function decItemQuantity(itemId, amount) {
+export async function decItemQuantity(itemId, stock) {
 	// 1) Fetch current quantity
 	const { data: item, error: fetchError } = await supabase
 		.from("cart_items")
@@ -150,7 +157,7 @@ export async function decItemQuantity(itemId, amount) {
 	if (item?.quantity <= 1) {
 		return;
 	}
-	const newQuantity = (item?.quantity || 0) - amount;
+	const newQuantity = (item?.quantity || 0) - 1;
 
 	// 2) Update the quantity
 	const { data: updatedItem, error: updateError } = await supabase

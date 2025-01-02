@@ -68,7 +68,8 @@ export async function GetCartItems(cart_id) {
 	const { data, error } = await supabase
 		.from("cart_items")
 		.select("id,quantity,price,cart_id,products(id,name,price,image,stock)")
-		.eq("cart_id", cart_id);
+		.eq("cart_id", cart_id)
+		.order("id", { ascending: true });
 
 	if (error) {
 		console.error(error);
