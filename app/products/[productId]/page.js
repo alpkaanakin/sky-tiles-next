@@ -2,7 +2,6 @@ import AddtoCart from "@/app/_components/AddtoCart";
 import Product from "@/app/_components/Product";
 import Spinner from "@/app/_components/Spinner";
 import { getProduct, getProducts } from "@/app/_lib/data-service";
-import Link from "next/link";
 
 import { Suspense } from "react";
 
@@ -31,13 +30,6 @@ export default async function Page({ params, searchParams }) {
 				<Suspense fallback={<Spinner />}>
 					<AddtoCart product={product} success={success} />
 				</Suspense>
-
-				<Link
-					href="/account/cart"
-					className="bg-violet-700 px-8 py-4 text-primary-100 font-semibold hover:bg-violet-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300"
-				>
-					Go To Cart
-				</Link>
 			</div>
 		</div>
 	);

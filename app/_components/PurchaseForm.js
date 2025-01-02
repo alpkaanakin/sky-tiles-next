@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { addToCart } from "../_lib/actions";
 
 import SubmitButton from "./SubmitButton";
@@ -63,6 +64,12 @@ function PurchaseForm({ product, user, success }) {
 				</div>
 			</form>
 			{success && <p className="text-green-500">Added to Cart successfully!</p>}
+			<Link
+				href="/account/cart"
+				className="bg-violet-700 px-8 py-4 text-primary-100 font-semibold hover:bg-violet-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300"
+			>
+				Go To Cart
+			</Link>
 		</div>
 	);
 }
