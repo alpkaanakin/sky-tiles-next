@@ -59,23 +59,24 @@ export default async function Page() {
 
 			<div className="col-span-3">
 				<h1 className="text-4xl mb-10 text-indigo-400 font-medium">
-					Managed by our family since 1962
+					Over 20 years experience
 				</h1>
 
 				<div className="space-y-8">
 					<p>
-						Since 1962, The Wild Oasis has been a cherished family-run retreat.
-						Started by our grandparents, this haven has been nurtured with love
-						and care, passing down through our family as a testament to our
-						dedication to creating a warm, welcoming environment.
+						At Sky Tiles, we believe that every surface tells a story. From the
+						soft glow of dawn across a kitchen backsplash to the warm evening
+						light reflecting on a living room floor, our tiles capture life’s
+						most luminous moments and bring them into your home. Established
+						with a passion for merging art and everyday function, Sky Tiles
+						offers a wide range of designs that celebrate both timeless styles
+						and modern innovations.
 					</p>
 					<p>
-						Over the years, we&apos;ve maintained the essence of The Wild Oasis,
-						blending the timeless beauty of the mountains with the personal
-						touch only a family business can offer. Here, you&apos;re not just a
-						guest; you&apos;re part of our extended family. So join us at The
-						Wild Oasis soon, where tradition meets tranquility, and every visit
-						is like coming home.
+						Guided by our commitment to quality and craftsmanship, each tile is
+						created to inspire. Whether you’re drawn to subtle, earthy tones or
+						bold, contemporary patterns, Sky Tiles aims to spark creativity at
+						every turn.
 					</p>
 
 					<div>
