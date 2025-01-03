@@ -10,7 +10,7 @@ export default async function Navigation() {
 				<li>
 					<Link
 						href="/products"
-						className="hover:text-accent-400 transition-colors"
+						className="hover:text-violet-400 transition-colors"
 					>
 						Products
 					</Link>
@@ -18,7 +18,7 @@ export default async function Navigation() {
 				<li>
 					<Link
 						href="/about"
-						className="hover:text-accent-400 transition-colors"
+						className="hover:text-violet-400 transition-colors"
 					>
 						About
 					</Link>
@@ -27,14 +27,14 @@ export default async function Navigation() {
 					{session ? (
 						<Link
 							href="/account/profile"
-							className="hover:text-accent-400 transition-colors"
+							className="hover:text-violet-400 transition-colors"
 						>
 							{session.user.name.toLowerCase()}
 						</Link>
 					) : (
 						<Link
 							href="/login"
-							className="hover:text-accent-400 transition-colors"
+							className="hover:text-violet-400 transition-colors"
 						>
 							login
 						</Link>
@@ -45,7 +45,7 @@ export default async function Navigation() {
 					{session ? (
 						<Link
 							href="/account/cart"
-							className="hover:text-accent-400 transition-colors"
+							className="hover:text-violet-400 transition-colors"
 						>
 							cart
 						</Link>
